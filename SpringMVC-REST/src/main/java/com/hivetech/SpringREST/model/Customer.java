@@ -1,5 +1,9 @@
 package com.hivetech.SpringREST.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,6 +26,8 @@ public class Customer {
     private String country;
     private Integer salesRepEmployeeNumber;
     private Double creditLimit;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthday;
 //    private String profilePhotoName;
 

@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
                 cus.setCountry(rs.getString("country"));
                 cus.setSalesRepEmployeeNumber(rs.getInt("salesRepEmployeeNumber"));
                 cus.setCreditLimit(rs.getDouble("creditLimit"));
-                cus.setBirthday(null);
+                cus.setBirthday(rs.getDate("birthday").toLocalDate());
 
                 return cus;
             }
@@ -116,13 +116,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public boolean update(Customer customer) {
-
+        LOGGER.info(""+customer);
         return true;
     }
 
     @Override
     public boolean delete(int id) {
-
+        LOGGER.info("id: " + id);
         return true;
     }
 

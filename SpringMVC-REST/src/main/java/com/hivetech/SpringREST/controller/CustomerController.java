@@ -3,11 +3,13 @@ package com.hivetech.SpringREST.controller;
 import com.hivetech.SpringREST.model.Customer;
 import com.hivetech.SpringREST.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -17,21 +19,30 @@ public class CustomerController {
     private static final Logger LOGGER = Logger.getLogger(CustomerController.class.getTypeName());
 
     @Autowired
-    CustomerService customerService;
+    private CustomerService customerService;
+    @Autowired
+    private ApplicationContext applicationContext;
 
-    @GetMapping(value = "/customers", consumes = "application/json")
+    @GetMapping(value = "/customers")
     public List<Customer> getListCustomer(){
         return customerService.listCustomer();
     }
 
-    @GetMapping(value = "/", consumes = "application/json")
+    @GetMapping(value = "/")
     public ResponseEntity<?> home() {
         return new ResponseEntity<>("REST API - Base 1", HttpStatus.OK);
     }
 
     @GetMapping(value = "/customers/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Customer> getCutomer(@PathVariable("id") int id) {
-        System.out.println("Fetching Customer with id " + id);
+        LOGGER.info("Fetching Customer with id " + id);
+        return customerService.getCustomerById(id);
+    }
+
+    @GetMapping(value = "/customers/getById", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Customer> getCutomerByRequestParam(@RequestParam("id") int id, HttpServletRequest request) {
+        LOGGER.info("Fetching Customer with id " + id);
+        LOGGER.info("URL: " + request.getRequestURL().toString());
         return customerService.getCustomerById(id);
     }
 
@@ -39,45 +50,5 @@ public class CustomerController {
     public boolean addCustomer(@RequestBody Customer customer){
         return customerService.add(customer);
     }
-
-    //=================
-    @PostMapping(value = "/customer/update")
-    public boolean updateCustomerWithCustomerType(@RequestBody Customer customer){
-        boolean isUpdated = customerService.update(customer);
-
-        LOGGER.info(String.format("updateCustomerWithCustomerType: [%s], is Updated: [%b]", customer, isUpdated));
-
-        return isUpdated;
-    }
-
-    @PostMapping(value = "/customer/update/params?customerNumber={1},customerName={2},contactLastName={3}")
-    public boolean updateCustomerWithPathVarible(@RequestParam("1") int customerNumber, String customerName, String contactLastName){
-
-        Customer temp = new Customer(customerNumber, customerName, contactLastName);
-        boolean isUpdated = customerService.update(temp);
-        LOGGER.info(String.format("updateCustomerWithPathVarible: [%s], is Updated: [%b]", temp, isUpdated));
-
-        return isUpdated;
-    }
-
-    @PostMapping(value = "/customer/add")
-    public boolean addCustomerWithCustType(@RequestAttribute Customer customer){
-
-        boolean isAdded = customerService.add(customer);
-        LOGGER.info(String.format("addCustomerWithCustType: [%s], is Added: [%b]", customer, isAdded));
-
-        return isAdded;
-
-    }
-
-    @DeleteMapping(value = "/customer/delete/{1}")
-    public boolean deleteCustomerWithPath(@RequestPart("1") int id){
-
-        boolean isDeleted = customerService.delete(id);
-        LOGGER.info(String.format("deleteCustomerWithPath, customerNumber: [%d], is Deleted: [%b]", id, isDeleted));
-
-        return isDeleted;
-    }
-
 
 }
