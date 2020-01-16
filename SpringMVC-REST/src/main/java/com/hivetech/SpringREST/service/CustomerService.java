@@ -10,6 +10,6 @@ public interface CustomerService {
     Customer getCustomerById(int customerId);
     Integer getNextMaxId();
     boolean add(Customer customer);
-    void update(Customer customer);
-    void delete(int id);
+    boolean update(Customer customer);
+    boolean delete(int id);
 }
