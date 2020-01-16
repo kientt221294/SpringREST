@@ -122,7 +122,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public boolean delete(int id) {
-        LOGGER.info("id: " + id);
+        LOGGER.info("delete id: " + id);
         return true;
     }
 
