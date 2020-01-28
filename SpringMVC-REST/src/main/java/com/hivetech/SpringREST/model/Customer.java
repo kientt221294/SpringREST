@@ -8,9 +8,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
 
-@Getter @Setter @ToString
+@Getter @Setter @ToString @XmlRootElement
 public class Customer {
 
     private int customerNumber;
